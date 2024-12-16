@@ -45,8 +45,8 @@ class PlannerView extends StatelessWidget {
                       borderRadius: BorderRadius.circular(16),
                       child: Stack(
                         children: [
-                          Image.network(
-                            'https://example.com/santorini.jpg', // Replace with actual image URL
+                          Image.asset(
+                            'assets/location.png',
                             fit: BoxFit.cover,
                             height: 240,
                           ),
@@ -74,8 +74,8 @@ class PlannerView extends StatelessWidget {
                       borderRadius: BorderRadius.circular(16),
                       child: Stack(
                         children: [
-                          Image.network(
-                            'https://example.com/room.jpg', // Replace with actual image URL
+                          Image.asset(
+                            'assets/room.png',
                             fit: BoxFit.cover,
                             height: 240,
                           ),
