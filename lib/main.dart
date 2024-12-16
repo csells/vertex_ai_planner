@@ -10,28 +10,45 @@ import 'views/plans_view.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(const MaterialApp(home: HomePage()));
+  runApp(MaterialApp(home: HomePage()));
 }
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  HomePage({super.key});
+  final _planRepository = PlanRepository();
 
   @override
-  Widget build(BuildContext context) {
-    final planRepository = PlanRepository();
-    
-    return Scaffold(
-      appBar: AppBar(title: const Text('Vertex AI Planner')),
-      body: SplitOrTabs(
-        tabs: const [
-          Tab(text: 'Planner'),
-          Tab(text: 'Plans'),
-        ],
-        children: [
-          PlannerView(planRepository: planRepository),
-          PlansView(planRepository: planRepository),
-        ],
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Scaffold(
+        // Header with Gemini icon and title
+        appBar: AppBar(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/Spark_Gradient.png',
+                fit: BoxFit.cover,
+                height: 32,
+              ),
+              const SizedBox(width: 8),
+              const Text(
+                'Planning with the Gemini API',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ),
+        body: SplitOrTabs(
+          tabs: const [
+            Tab(text: 'Planner'),
+            Tab(text: 'Plans'),
+          ],
+          children: [
+            PlannerView(planRepository: _planRepository),
+            PlansView(planRepository: _planRepository),
+          ],
+        ),
+      );
 }
