@@ -33,31 +33,29 @@ class _PlannerViewState extends State<PlannerView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Image selection row
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // First image (location)
-                  Expanded(
-                    child: ImageChoiceView(
-                      choice: ImageChoice.location,
-                      groupChoice: _selectedImageChoice,
-                      onChanged: _selectImageChoice,
-                    ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // First image (location)
+                Expanded(
+                  child: ImageChoiceView(
+                    choice: ImageChoice.location,
+                    groupChoice: _selectedImageChoice,
+                    onChanged: _selectImageChoice,
                   ),
-                  const SizedBox(width: 24),
-                  // Second image (Room)
-                  Expanded(
-                    child: ImageChoiceView(
-                      choice: ImageChoice.room,
-                      groupChoice: _selectedImageChoice,
-                      onChanged: _selectImageChoice,
-                    ),
+                ),
+                const SizedBox(width: 24),
+                // Second image (Room)
+                Expanded(
+                  child: ImageChoiceView(
+                    choice: ImageChoice.room,
+                    groupChoice: _selectedImageChoice,
+                    onChanged: _selectImageChoice,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 24),
 
             // Prompt input section with Go button
             Row(
@@ -194,11 +192,14 @@ class ImageChoiceView extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Stack(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(24),
-            child: Image.asset(
-              _imageAssetPath(choice),
-              fit: BoxFit.cover,
+          GestureDetector(
+            onTap: () => onChanged(choice),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(24),
+              child: Image.asset(
+                _imageAssetPath(choice),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           Positioned(
@@ -213,7 +214,7 @@ class ImageChoiceView extends StatelessWidget {
                 value: choice == groupChoice,
                 onChanged: (value) => onChanged(choice),
                 fillColor: WidgetStateProperty.all(Colors.white),
-                checkColor: Colors.black,
+                checkColor: Colors.blue[900],
                 side: BorderSide.none,
               ),
             ),
