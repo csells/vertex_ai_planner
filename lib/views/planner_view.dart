@@ -76,18 +76,14 @@ class _PlannerViewState extends State<PlannerView> {
                   ),
                 ),
                 const SizedBox(width: 8),
-                ElevatedButton.icon(
-                  onPressed: () {},
+                GeminiButton(
+                  onPressed: _goPressed,
                   icon: Image.asset(
                     'assets/Spark_Gradient.png',
                     fit: BoxFit.cover,
                     height: 16,
                   ),
                   label: const Text('Go'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue[100],
-                    foregroundColor: Colors.blue[900],
-                  ),
                 ),
               ],
             ),
@@ -173,6 +169,41 @@ class _PlannerViewState extends State<PlannerView> {
         ImageChoice.room => 'You are an organization expert transforming this '
             'place to be enjoyed by a child and a toddler who love superheroes',
       };
+
+  void _goPressed() {
+    debugPrint('Go button pressed');
+  }
+}
+
+class GeminiButton extends StatelessWidget {
+  const GeminiButton({
+    required this.onPressed,
+    required this.label,
+    this.icon,
+    super.key,
+  });
+
+  final void Function() onPressed;
+  final Widget? icon;
+  final Widget label;
+
+  @override
+  Widget build(BuildContext context) => ElevatedButton.icon(
+        onPressed: onPressed,
+        icon: icon,
+        label: label,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.blue[100],
+          foregroundColor: Colors.blue[900],
+          padding: const EdgeInsets.symmetric(
+            vertical: 24,
+            horizontal: 16,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+        ),
+      );
 }
 
 enum ImageChoice { location, room }
