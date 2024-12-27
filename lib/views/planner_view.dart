@@ -1,24 +1,21 @@
-import 'package:firebase_vertexai/firebase_vertexai.dart';
 import 'package:flutter/material.dart';
 
 import '../buttons/hollow_button.dart';
 import '../buttons/solid_button.dart';
-import '../data/plan_repository.dart';
 import 'image_choice_view.dart';
 
 class PlannerView extends StatefulWidget {
-  const PlannerView({required this.planRepository, super.key});
-  final PlanRepository planRepository;
+  const PlannerView({super.key});
 
   @override
   State<PlannerView> createState() => _PlannerViewState();
 }
 
 class _PlannerViewState extends State<PlannerView> {
-  final _model = FirebaseVertexAI.instance.generativeModel(
-    model: 'gemini-1.5-flash-002',
-    systemInstruction: Content.text('TODO'),
-  );
+  // final _model = FirebaseVertexAI.instance.generativeModel(
+  //   model: 'gemini-1.5-flash-002',
+  //   systemInstruction: Content.text('TODO'),
+  // );
 
   var _selectedImageChoice = ImageChoice.location;
   final _controller = TextEditingController();

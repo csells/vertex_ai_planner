@@ -1,83 +1,46 @@
 import 'package:flutter/foundation.dart';
 
-// Model classes
-class Todo {
-  Todo({
-    required this.title,
-    this.isDone = false,
-  });
-  String title;
-  bool isDone;
+class PlanItem extends ChangeNotifier {
+  PlanItem({required this.title, bool isDone = false}) : _isDone = isDone;
+  final String title;
+  bool _isDone;
+  bool get isDone => _isDone;
+  set isDone(bool value) {
+    _isDone = value;
+    notifyListeners();
+  }
 }
 
-class TodoList {
-  TodoList({
-    required this.title,
-    List<Todo>? items,
-  }) : items = items ?? [];
-  String title;
-  List<Todo> items;
+class Plan {
+  Plan({required this.title, required this.items});
+  final String title;
+  final List<PlanItem> items;
 }
 
 class PlanRepository extends ChangeNotifier {
-  final List<TodoList> _lists = [];
+  PlanRepository._();
+  final List<Plan> _plans = [];
 
-  // Getters
-  List<TodoList> get lists => List.unmodifiable(_lists);
+  static final PlanRepository instance = PlanRepository._();
+  Iterable<Plan> get plans => _plans;
 
-  // Methods to manage TodoLists
-  void addList(String title) {
-    _lists.add(TodoList(title: title));
+  int addPlan(Plan plan) {
+    _plans.add(plan);
+    notifyListeners();
+    return _plans.length - 1;
+  }
+
+  void removePlan(int planIndex) {
+    assert(planIndex >= 0 && planIndex < _plans.length);
+    _plans.removeAt(planIndex);
     notifyListeners();
   }
 
-  void removeList(int listIndex) {
-    if (listIndex >= 0 && listIndex < _lists.length) {
-      _lists.removeAt(listIndex);
-      notifyListeners();
-    }
-  }
-
-  void updateListTitle(int listIndex, String newTitle) {
-    if (listIndex >= 0 && listIndex < _lists.length) {
-      _lists[listIndex].title = newTitle;
-      notifyListeners();
-    }
-  }
-
-  // Methods to manage Todo items within lists
-  void addTodoItem(int listIndex, String title) {
-    if (listIndex >= 0 && listIndex < _lists.length) {
-      _lists[listIndex].items.add(Todo(title: title));
-      notifyListeners();
-    }
-  }
-
-  void removeTodoItem(int listIndex, int itemIndex) {
-    if (listIndex >= 0 && listIndex < _lists.length) {
-      if (itemIndex >= 0 && itemIndex < _lists[listIndex].items.length) {
-        _lists[listIndex].items.removeAt(itemIndex);
-        notifyListeners();
-      }
-    }
-  }
-
-  void toggleTodoStatus(int listIndex, int itemIndex) {
-    if (listIndex >= 0 && listIndex < _lists.length) {
-      if (itemIndex >= 0 && itemIndex < _lists[listIndex].items.length) {
-        _lists[listIndex].items[itemIndex].isDone =
-            !_lists[listIndex].items[itemIndex].isDone;
-        notifyListeners();
-      }
-    }
-  }
-
-  void updateTodoTitle(int listIndex, int itemIndex, String newTitle) {
-    if (listIndex >= 0 && listIndex < _lists.length) {
-      if (itemIndex >= 0 && itemIndex < _lists[listIndex].items.length) {
-        _lists[listIndex].items[itemIndex].title = newTitle;
-        notifyListeners();
-      }
-    }
+  void togglePlanItemStatus(int planIndex, int itemIndex) {
+    assert(planIndex >= 0 && planIndex < _plans.length);
+    assert(itemIndex >= 0 && itemIndex < _plans[planIndex].items.length);
+    _plans[planIndex].items[itemIndex].isDone =
+        !_plans[planIndex].items[itemIndex].isDone;
+    notifyListeners();
   }
 }
