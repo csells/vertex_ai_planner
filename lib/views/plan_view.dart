@@ -28,7 +28,7 @@ class PlanView extends StatelessWidget {
                   ),
                   IconButton(
                     icon: const Icon(Icons.delete_outline),
-                    onPressed: () {},
+                    onPressed: _removePressed,
                     color: Colors.red[100],
                   ),
                 ],
@@ -68,4 +68,8 @@ class PlanView extends StatelessWidget {
           ),
         ),
       );
+
+  void _removePressed() {
+    debugPrint('Removing plan: ${plan.title}');
+  }
 }

@@ -38,13 +38,13 @@ class HomePage extends StatelessWidget {
             ],
           ),
         ),
-        body: const SplitOrTabs(
-          tabs: [
+        body: SplitOrTabs(
+          tabs: const [
             Tab(text: 'Planner'),
             Tab(text: 'Plans'),
           ],
           children: [
-            PlannerView(),
+            const PlannerView(),
             PlansView(),
           ],
         ),
