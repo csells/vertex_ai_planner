@@ -21,6 +21,12 @@ class _PlannerViewState extends State<PlannerView> {
   final _controller = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    _selectImageChoice(ImageChoice.location);
+  }
+
+  @override
   Widget build(BuildContext context) => Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -39,7 +45,7 @@ class _PlannerViewState extends State<PlannerView> {
                       onChanged: _selectImageChoice,
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  const SizedBox(width: 24),
                   // Second image (Room)
                   Expanded(
                     child: ImageChoiceView(
@@ -53,27 +59,36 @@ class _PlannerViewState extends State<PlannerView> {
             ),
             const SizedBox(height: 8),
 
-            // Prompt input section
-            Column(
+            // Prompt input section with Go button
+            Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Add a prompt*',
-                  style: TextStyle(color: Colors.grey, fontSize: 12),
-                ),
-                const SizedBox(height: 8),
-                DecoratedBox(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey.shade300),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+                Expanded(
                   child: TextField(
                     controller: _controller,
                     maxLines: null,
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      contentPadding: EdgeInsets.all(12),
+                    decoration: InputDecoration(
+                      labelText: 'Add a prompt*',
+                      labelStyle: const TextStyle(color: Colors.grey),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      contentPadding: const EdgeInsets.all(12),
                     ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                ElevatedButton.icon(
+                  onPressed: () {},
+                  icon: Image.asset(
+                    'assets/Spark_Gradient.png',
+                    fit: BoxFit.cover,
+                    height: 16,
+                  ),
+                  label: const Text('Go'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue[100],
+                    foregroundColor: Colors.blue[900],
                   ),
                 ),
               ],
@@ -93,24 +108,6 @@ class _PlannerViewState extends State<PlannerView> {
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ],
-              ),
-            ),
-
-            // Go button
-            Align(
-              alignment: Alignment.centerRight,
-              child: ElevatedButton.icon(
-                onPressed: () {},
-                icon: Image.asset(
-                  'assets/Spark_Gradient.png',
-                  fit: BoxFit.cover,
-                  height: 16,
-                ),
-                label: const Text('Go'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue[100],
-                  foregroundColor: Colors.blue[900],
-                ),
               ),
             ),
 
@@ -197,18 +194,28 @@ class ImageChoiceView extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Stack(
         children: [
-          Image.asset(
-            _imageAssetPath(choice),
-            fit: BoxFit.cover,
+          ClipRRect(
+            borderRadius: BorderRadius.circular(24),
+            child: Image.asset(
+              _imageAssetPath(choice),
+              fit: BoxFit.cover,
+            ),
           ),
           Positioned(
-            top: 8,
-            left: 8,
-            child: Radio<ImageChoice>(
-              value: choice,
-              groupValue: groupChoice,
-              onChanged: (value) => onChanged(value!),
-              fillColor: WidgetStateProperty.all(Colors.white),
+            top: 24,
+            left: 24,
+            child: DecoratedBox(
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+              ),
+              child: Checkbox(
+                value: choice == groupChoice,
+                onChanged: (value) => onChanged(choice),
+                fillColor: WidgetStateProperty.all(Colors.white),
+                checkColor: Colors.black,
+                side: BorderSide.none,
+              ),
             ),
           ),
         ],
