@@ -1,7 +1,10 @@
 import 'package:firebase_vertexai/firebase_vertexai.dart';
 import 'package:flutter/material.dart';
 
+import '../buttons/hollow_button.dart';
+import '../buttons/solid_button.dart';
 import '../data/plan_repository.dart';
+import 'image_choice_view.dart';
 
 class PlannerView extends StatefulWidget {
   const PlannerView({required this.planRepository, super.key});
@@ -76,14 +79,14 @@ class _PlannerViewState extends State<PlannerView> {
                   ),
                 ),
                 const SizedBox(width: 8),
-                GeminiButton(
+                SolidButton(
                   onPressed: _goPressed,
                   icon: Image.asset(
                     'assets/Spark_Gradient.png',
                     fit: BoxFit.cover,
                     height: 16,
                   ),
-                  label: const Text('Go'),
+                  label: 'Go',
                 ),
               ],
             ),
@@ -112,44 +115,15 @@ class _PlannerViewState extends State<PlannerView> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 // Save button
-                ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue[100],
-                    foregroundColor: Colors.black,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(32),
-                    ),
-                  ),
-                  child: const Text(
-                    'Save',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
+                SolidButton(
+                  onPressed: _savePressed,
+                  label: 'Save',
                 ),
                 const SizedBox(width: 16),
                 // Reset button
-                OutlinedButton(
-                  onPressed: () {},
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: Colors.purple[700],
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    side: BorderSide(color: Colors.purple[700]!),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(32),
-                    ),
-                  ),
-                  child: Text(
-                    'Reset',
-                    style: TextStyle(
-                      color: Colors.purple[700],
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
+                HollowButton(
+                  onPressed: _resetPressed,
+                  label: 'Reset',
                 ),
               ],
             ),
@@ -173,88 +147,12 @@ class _PlannerViewState extends State<PlannerView> {
   void _goPressed() {
     debugPrint('Go button pressed');
   }
-}
 
-class GeminiButton extends StatelessWidget {
-  const GeminiButton({
-    required this.onPressed,
-    required this.label,
-    this.icon,
-    super.key,
-  });
+  void _savePressed() {
+    debugPrint('Save button pressed');
+  }
 
-  final void Function() onPressed;
-  final Widget? icon;
-  final Widget label;
-
-  @override
-  Widget build(BuildContext context) => ElevatedButton.icon(
-        onPressed: onPressed,
-        icon: icon,
-        label: label,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.blue[100],
-          foregroundColor: Colors.blue[900],
-          padding: const EdgeInsets.symmetric(
-            vertical: 24,
-            horizontal: 16,
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-        ),
-      );
-}
-
-enum ImageChoice { location, room }
-
-class ImageChoiceView extends StatelessWidget {
-  const ImageChoiceView({
-    required this.choice,
-    required this.groupChoice,
-    required this.onChanged,
-    super.key,
-  });
-
-  final ImageChoice choice;
-  final ImageChoice groupChoice;
-  final void Function(ImageChoice choice) onChanged;
-
-  @override
-  Widget build(BuildContext context) => Stack(
-        children: [
-          GestureDetector(
-            onTap: () => onChanged(choice),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(24),
-              child: Image.asset(
-                _imageAssetPath(choice),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          Positioned(
-            top: 24,
-            left: 24,
-            child: DecoratedBox(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-              ),
-              child: Checkbox(
-                value: choice == groupChoice,
-                onChanged: (value) => onChanged(choice),
-                fillColor: WidgetStateProperty.all(Colors.white),
-                checkColor: Colors.blue[900],
-                side: BorderSide.none,
-              ),
-            ),
-          ),
-        ],
-      );
-
-  String _imageAssetPath(ImageChoice choice) => switch (choice) {
-        ImageChoice.location => 'assets/location.png',
-        ImageChoice.room => 'assets/room.png',
-      };
+  void _resetPressed() {
+    debugPrint('Reset button pressed');
+  }
 }
