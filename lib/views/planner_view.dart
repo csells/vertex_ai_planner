@@ -17,6 +17,9 @@ class _PlannerViewState extends State<PlannerView> {
     systemInstruction: Content.text('TODO'),
   );
 
+  var _selectedImageChoice = ImageChoice.location;
+  final _controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) => Padding(
         padding: const EdgeInsets.all(24),
@@ -32,10 +35,8 @@ class _PlannerViewState extends State<PlannerView> {
                   Expanded(
                     child: ImageChoiceView(
                       choice: ImageChoice.location,
-                      groupChoice: ImageChoice.location,
-                      onChanged: (value) {
-                        // Handle checkbox change event
-                      },
+                      groupChoice: _selectedImageChoice,
+                      onChanged: _selectImageChoice,
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -43,16 +44,14 @@ class _PlannerViewState extends State<PlannerView> {
                   Expanded(
                     child: ImageChoiceView(
                       choice: ImageChoice.room,
-                      groupChoice: ImageChoice.room,
-                      onChanged: (value) {
-                        // Handle checkbox change event
-                      },
+                      groupChoice: _selectedImageChoice,
+                      onChanged: _selectImageChoice,
                     ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 8),
 
             // Prompt input section
             Column(
@@ -60,10 +59,7 @@ class _PlannerViewState extends State<PlannerView> {
               children: [
                 const Text(
                   'Add a prompt*',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 12,
-                  ),
+                  style: TextStyle(color: Colors.grey, fontSize: 12),
                 ),
                 const SizedBox(height: 8),
                 DecoratedBox(
@@ -71,12 +67,10 @@ class _PlannerViewState extends State<PlannerView> {
                     border: Border.all(color: Colors.grey.shade300),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const TextField(
-                    maxLines: 3,
-                    decoration: InputDecoration(
-                      hintText:
-                          'You are a travel expert planning a trip here for '
-                          '5 people...',
+                  child: TextField(
+                    controller: _controller,
+                    maxLines: null,
+                    decoration: const InputDecoration(
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.all(12),
                     ),
@@ -158,12 +152,22 @@ class _PlannerViewState extends State<PlannerView> {
           ],
         ),
       );
+
+  void _selectImageChoice(ImageChoice value) => setState(() {
+        _selectedImageChoice = value;
+        _controller.text = _promptFor(value);
+      });
+
+  String _promptFor(ImageChoice value) => switch (value) {
+        ImageChoice.location =>
+          'You are a travel expert planning a trip here for 5 people including '
+              'one toddler and my mom who is turning 50',
+        ImageChoice.room => 'You are an organization expert transforming this '
+            'place to be enjoyed by a child and a toddler who love superheroes',
+      };
 }
 
-enum ImageChoice {
-  location,
-  room,
-}
+enum ImageChoice { location, room }
 
 class ImageChoiceView extends StatelessWidget {
   const ImageChoiceView({
@@ -175,7 +179,7 @@ class ImageChoiceView extends StatelessWidget {
 
   final ImageChoice choice;
   final ImageChoice groupChoice;
-  final void Function(ImageChoice? choice) onChanged;
+  final void Function(ImageChoice choice) onChanged;
 
   @override
   Widget build(BuildContext context) => Stack(
@@ -190,7 +194,8 @@ class ImageChoiceView extends StatelessWidget {
             child: Radio<ImageChoice>(
               value: choice,
               groupValue: groupChoice,
-              onChanged: onChanged,
+              onChanged: (value) => onChanged(value!),
+              fillColor: WidgetStateProperty.all(Colors.white),
             ),
           ),
         ],
