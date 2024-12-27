@@ -78,13 +78,22 @@ class _PlannerViewState extends State<PlannerView> {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 8),
 
             // Helper text
-            const Text(
-              'Update the prompt to generate a new list, like:\n'
-              'Help me plan a trip to this location',
-              style: TextStyle(color: Colors.grey),
+            RichText(
+              text: const TextSpan(
+                style: TextStyle(color: Colors.grey),
+                children: [
+                  TextSpan(
+                    text: '*Update the prompt to generate a new list, like:\n',
+                  ),
+                  TextSpan(
+                    text: 'Help me plan a trip to this location',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
             ),
 
             // Go button
@@ -92,7 +101,11 @@ class _PlannerViewState extends State<PlannerView> {
               alignment: Alignment.centerRight,
               child: ElevatedButton.icon(
                 onPressed: () {},
-                icon: const Icon(Icons.auto_awesome, size: 16),
+                icon: Image.asset(
+                  'assets/Spark_Gradient.png',
+                  fit: BoxFit.cover,
+                  height: 16,
+                ),
                 label: const Text('Go'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue[100],
