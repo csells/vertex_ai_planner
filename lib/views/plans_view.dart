@@ -45,16 +45,22 @@ class PlansView extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: ListenableBuilder(
           listenable: _repo,
-          builder: (context, child) => GridView(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
-              childAspectRatio: 0.8,
-            ),
+          builder: (context, child) => ListView(
+            scrollDirection: Axis.horizontal,
             children: [
-              for (final plan in PlanRepository.instance.plans)
-                PlanView(plan: plan),
+              for (var planIndex = 0;
+                  planIndex < PlanRepository.instance.plans.length;
+                  planIndex++)
+                SizedBox(
+                  width: 300,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 16),
+                    child: PlanView(
+                      planIndex: planIndex,
+                      onRemovePlan: () => _repo.removePlan(planIndex),
+                    ),
+                  ),
+                ),
             ],
           ),
         ),

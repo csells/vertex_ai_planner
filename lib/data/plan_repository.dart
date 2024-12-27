@@ -22,7 +22,7 @@ class PlanRepository extends ChangeNotifier {
   final List<Plan> _plans = [];
 
   static final PlanRepository instance = PlanRepository._();
-  Iterable<Plan> get plans => _plans;
+  List<Plan> get plans => List.unmodifiable(_plans);
 
   int addPlan(Plan plan) {
     _plans.add(plan);
@@ -36,11 +36,14 @@ class PlanRepository extends ChangeNotifier {
     notifyListeners();
   }
 
-  void togglePlanItemStatus(int planIndex, int itemIndex) {
+  void setPlanItemStatus({
+    required int planIndex,
+    required int itemIndex,
+    required bool isDone,
+  }) {
     assert(planIndex >= 0 && planIndex < _plans.length);
     assert(itemIndex >= 0 && itemIndex < _plans[planIndex].items.length);
-    _plans[planIndex].items[itemIndex].isDone =
-        !_plans[planIndex].items[itemIndex].isDone;
+    _plans[planIndex].items[itemIndex].isDone = isDone;
     notifyListeners();
   }
 }
