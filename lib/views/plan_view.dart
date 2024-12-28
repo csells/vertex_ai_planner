@@ -74,9 +74,15 @@ class PlanView extends StatelessWidget {
                           ),
                           const SizedBox(width: 12),
                           Expanded(
-                            child: Text(
-                              plan.items[index].title,
-                              style: const TextStyle(fontSize: 16),
+                            child: GestureDetector(
+                              onTap: () => onItemStatusChanged(
+                                index,
+                                !item.isDone,
+                              ),
+                              child: Text(
+                                plan.items[index].title,
+                                style: const TextStyle(fontSize: 16),
+                              ),
                             ),
                           ),
                         ],
