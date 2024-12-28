@@ -36,9 +36,10 @@ class _PlannerViewState extends State<PlannerView> {
           borderRadius: BorderRadius.circular(16),
           child: ColoredBox(
             color: Colors.white,
-            child: Column(
-              children: [
-                Padding(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxHeight: 600),
+              child: SingleChildScrollView(
+                child: Padding(
                   padding: const EdgeInsets.all(24),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -49,7 +50,8 @@ class _PlannerViewState extends State<PlannerView> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           // First image (location)
-                          Expanded(
+                          Flexible(
+                            fit: FlexFit.loose,
                             child: ImageChoiceView(
                               choice: ImageChoice.location,
                               groupChoice: _selectedImageChoice,
@@ -58,7 +60,8 @@ class _PlannerViewState extends State<PlannerView> {
                           ),
                           const SizedBox(width: 24),
                           // Second image (Room)
-                          Expanded(
+                          Flexible(
+                            fit: FlexFit.loose,
                             child: ImageChoiceView(
                               choice: ImageChoice.room,
                               groupChoice: _selectedImageChoice,
@@ -73,7 +76,8 @@ class _PlannerViewState extends State<PlannerView> {
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(
+                          Flexible(
+                            fit: FlexFit.loose,
                             child: TextField(
                               controller: _controller,
                               maxLines: null,
@@ -125,26 +129,29 @@ class _PlannerViewState extends State<PlannerView> {
 
                       // Save and Reset buttons row
                       if (_plan != null)
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            // Save button
-                            SolidButton(
-                              onPressed: _savePressed,
-                              label: 'Save',
-                            ),
-                            const SizedBox(width: 16),
-                            // Reset button
-                            HollowButton(
-                              onPressed: _resetPressed,
-                              label: 'Reset',
-                            ),
-                          ],
+                        Padding(
+                          padding: const EdgeInsets.only(top: 16),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              // Save button
+                              SolidButton(
+                                onPressed: _savePressed,
+                                label: 'Save',
+                              ),
+                              const SizedBox(width: 16),
+                              // Reset button
+                              HollowButton(
+                                onPressed: _resetPressed,
+                                label: 'Reset',
+                              ),
+                            ],
+                          ),
                         ),
                     ],
                   ),
                 ),
-              ],
+              ),
             ),
           ),
         ),
@@ -183,12 +190,9 @@ class _PlannerViewState extends State<PlannerView> {
   }
 
   void _savePressed() {
-    // TODO: implement
-    debugPrint('Save button pressed');
+    PlanRepository.instance.addPlan(_plan!);
+    setState(() => _plan = null);
   }
 
-  void _resetPressed() {
-    // TODO: implement
-    debugPrint('Reset button pressed');
-  }
+  void _resetPressed() => setState(() => _plan = null);
 }

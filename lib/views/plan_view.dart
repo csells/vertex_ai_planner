@@ -27,6 +27,7 @@ class PlanView extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
@@ -53,8 +54,10 @@ class PlanView extends StatelessWidget {
                 ],
               ),
               const Divider(),
-              Expanded(
+              SizedBox(
+                height: (plan.items.length + 2) * 32,
                 child: ListView.builder(
+                  shrinkWrap: true,
                   itemCount: plan.items.length,
                   itemBuilder: (context, index) {
                     final item = plan.items[index];
