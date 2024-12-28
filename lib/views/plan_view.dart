@@ -55,7 +55,7 @@ class PlanView extends StatelessWidget {
               ),
               const Divider(),
               SizedBox(
-                height: (plan.items.length + 2) * 32,
+                height: (plan.items.length + 2) * 36,
                 child: ListView.builder(
                   shrinkWrap: true,
                   itemCount: plan.items.length,

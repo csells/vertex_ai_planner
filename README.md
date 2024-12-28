@@ -1,6 +1,8 @@
 # Vertex AI Planner
 
-TODO
+TODO: test on the four platforms
+
+TODO: write the README
 
 The vertex_ai_planner repository contains a sample app showcasing the power of Firebase Vertex AI. It's written using Flutter and [the Vertex AI in Firebase Flutter package](https://pub.dev/packages/firebase_vertexai).
 

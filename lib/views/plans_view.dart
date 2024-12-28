@@ -4,25 +4,7 @@ import '../data/plan_repository.dart';
 import 'plan_view.dart';
 
 class PlansView extends StatelessWidget {
-  PlansView({super.key}) {
-    // TODO: remove
-    if (PlanRepository.instance.plans.isEmpty) {
-      PlanRepository.instance.addPlan(
-        Plan(
-          title: 'Superhero Kids Room',
-          items: [
-            PlanItem(title: 'Clear the clutter'),
-            PlanItem(title: 'Organize books and toys'),
-            PlanItem(title: 'Superhero theme decorations'),
-            PlanItem(title: 'Install superhero bedding'),
-            PlanItem(title: 'Set up play area'),
-            PlanItem(title: 'Add storage solutions'),
-          ],
-        ),
-      );
-    }
-  }
-
+  PlansView({super.key});
   final PlanRepository _repo = PlanRepository.instance;
 
   @override
@@ -46,7 +28,7 @@ class PlansView extends StatelessWidget {
                               planIndex < PlanRepository.instance.plans.length;
                               planIndex++)
                             SizedBox(
-                              width: 300,
+                              width: 500,
                               child: Padding(
                                 padding: const EdgeInsets.only(right: 16),
                                 child: PlanView(

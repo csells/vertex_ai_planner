@@ -1,3 +1,8 @@
+// ignore_for_file: avoid_dynamic_calls
+
+import 'dart:convert';
+
+import 'package:firebase_vertexai/firebase_vertexai.dart';
 import 'package:flutter/material.dart';
 
 import '../buttons/hollow_button.dart';
@@ -14,14 +19,27 @@ class PlannerView extends StatefulWidget {
 }
 
 class _PlannerViewState extends State<PlannerView> {
-  // final _model = FirebaseVertexAI.instance.generativeModel(
-  //   model: 'gemini-1.5-flash-002',
-  //   systemInstruction: Content.text('TODO'),
-  // );
+  final _model = FirebaseVertexAI.instance.generativeModel(
+    model: 'gemini-1.5-flash-002',
+    generationConfig: GenerationConfig(responseMimeType: 'application/json'),
+    systemInstruction: Content.text(
+      '''
+Keep task names short; names ideally within 7 words.
+
+Use the following schema in your response:
+{
+  "title":"string",
+  "subtasks":"string[]"
+}
+
+The substasks should follow logical order ''',
+    ),
+  );
 
   var _selectedImageChoice = ImageChoice.location;
   final _controller = TextEditingController();
   Plan? _plan;
+  var _isGenerating = false;
 
   @override
   void initState() {
@@ -120,6 +138,12 @@ class _PlannerViewState extends State<PlannerView> {
 
                       const SizedBox(height: 24),
 
+                      // Generating a plan
+                      if (_isGenerating)
+                        const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+
                       // Plan view
                       if (_plan != null)
                         Stack(
@@ -185,22 +209,21 @@ class _PlannerViewState extends State<PlannerView> {
             'place to be enjoyed by a child and a toddler who love superheroes',
       };
 
-  void _goPressed() {
-    // TODO: implement
-    debugPrint('Go button pressed');
+  Future<void> _goPressed() async {
     setState(() {
-      _plan = Plan(
-        title: 'Santorini Trip for 5',
-        items: [
-          PlanItem(title: 'Flights and Accommodation'),
-          PlanItem(title: 'Transportation in Santorini'),
-          PlanItem(title: 'Activities for all ages'),
-          PlanItem(title: '50th Birthday Celebration'),
-          PlanItem(title: 'Toddler-Specific Needs'),
-          PlanItem(title: 'Itinerary and Bookings'),
-          PlanItem(title: 'Emergency Contacts and Insurance'),
-        ],
-      );
+      _isGenerating = true;
+      _plan = null;
+    });
+
+    final text = _controller.text;
+    final prompt = 'Generate a title and list of tasks for $text '
+        'using the ${_selectedImageChoice.name}.png image provided.';
+    final result = await _model.generateContent([Content.text(prompt)]);
+    final json = jsonDecode(result.text!);
+
+    setState(() {
+      _plan = Plan.fromJson(json);
+      _isGenerating = false;
     });
   }
 
