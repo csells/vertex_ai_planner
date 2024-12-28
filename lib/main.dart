@@ -14,11 +14,14 @@ void main() async {
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
+  static const bgColor = Color(0xFFE2F1FD);
 
   @override
   Widget build(BuildContext context) => Scaffold(
+        backgroundColor: bgColor,
         // Header with Gemini icon and title
         appBar: AppBar(
+          backgroundColor: bgColor,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

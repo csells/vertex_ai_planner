@@ -29,102 +29,112 @@ class _PlannerViewState extends State<PlannerView> {
   @override
   Widget build(BuildContext context) => Padding(
         padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Image selection row
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // First image (location)
-                Expanded(
-                  child: ImageChoiceView(
-                    choice: ImageChoice.location,
-                    groupChoice: _selectedImageChoice,
-                    onChanged: _selectImageChoice,
-                  ),
-                ),
-                const SizedBox(width: 24),
-                // Second image (Room)
-                Expanded(
-                  child: ImageChoiceView(
-                    choice: ImageChoice.room,
-                    groupChoice: _selectedImageChoice,
-                    onChanged: _selectImageChoice,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 24),
-
-            // Prompt input section with Go button
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _controller,
-                    maxLines: null,
-                    decoration: InputDecoration(
-                      labelText: 'Add a prompt*',
-                      labelStyle: const TextStyle(color: Colors.grey),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(16),
+          child: ColoredBox(
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Image selection row
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // First image (location)
+                      Expanded(
+                        child: ImageChoiceView(
+                          choice: ImageChoice.location,
+                          groupChoice: _selectedImageChoice,
+                          onChanged: _selectImageChoice,
+                        ),
                       ),
-                      contentPadding: const EdgeInsets.all(12),
+                      const SizedBox(width: 24),
+                      // Second image (Room)
+                      Expanded(
+                        child: ImageChoiceView(
+                          choice: ImageChoice.room,
+                          groupChoice: _selectedImageChoice,
+                          onChanged: _selectImageChoice,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+
+                  // Prompt input section with Go button
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _controller,
+                          maxLines: null,
+                          decoration: InputDecoration(
+                            labelText: 'Add a prompt*',
+                            labelStyle: const TextStyle(color: Colors.grey),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            contentPadding: const EdgeInsets.all(12),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      SolidButton(
+                        onPressed: _goPressed,
+                        icon: Image.asset(
+                          'assets/Spark_Gradient.png',
+                          fit: BoxFit.cover,
+                          height: 16,
+                        ),
+                        label: 'Go',
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+
+                  // Helper text
+                  RichText(
+                    text: const TextSpan(
+                      style: TextStyle(color: Colors.grey),
+                      children: [
+                        TextSpan(
+                          text:
+                              '*Update the prompt to generate a new list, like:\n',
+                        ),
+                        TextSpan(
+                          text: 'Help me plan a trip to this location',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-                const SizedBox(width: 8),
-                SolidButton(
-                  onPressed: _goPressed,
-                  icon: Image.asset(
-                    'assets/Spark_Gradient.png',
-                    fit: BoxFit.cover,
-                    height: 16,
-                  ),
-                  label: 'Go',
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
 
-            // Helper text
-            RichText(
-              text: const TextSpan(
-                style: TextStyle(color: Colors.grey),
-                children: [
-                  TextSpan(
-                    text: '*Update the prompt to generate a new list, like:\n',
-                  ),
-                  TextSpan(
-                    text: 'Help me plan a trip to this location',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                  const SizedBox(height: 24),
+
+                  // Save and Reset buttons row
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      // Save button
+                      SolidButton(
+                        onPressed: _savePressed,
+                        label: 'Save',
+                      ),
+                      const SizedBox(width: 16),
+                      // Reset button
+                      HollowButton(
+                        onPressed: _resetPressed,
+                        label: 'Reset',
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
-
-            const SizedBox(height: 24),
-
-            // Save and Reset buttons row
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                // Save button
-                SolidButton(
-                  onPressed: _savePressed,
-                  label: 'Save',
-                ),
-                const SizedBox(width: 16),
-                // Reset button
-                HollowButton(
-                  onPressed: _resetPressed,
-                  label: 'Reset',
-                ),
-              ],
-            ),
-          ],
+          ),
         ),
       );
 

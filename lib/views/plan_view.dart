@@ -19,8 +19,11 @@ class PlanView extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Card(
         shape: RoundedRectangleBorder(
+          side: const BorderSide(color: Colors.black, width: 1),
           borderRadius: BorderRadius.circular(16),
         ),
+        color: Colors.white,
+        elevation: 0,
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -46,6 +49,7 @@ class PlanView extends StatelessWidget {
               const Divider(),
               Expanded(
                 child: ListView.builder(
+                  shrinkWrap: true,
                   itemCount: _plan.items.length,
                   itemBuilder: (context, index) {
                     final item = _plan.items[index];
