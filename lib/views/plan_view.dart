@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 import '../data/plan_repository.dart';
 
 class PlanView extends StatelessWidget {
-  PlanView({
-    required int planIndex,
-    required void Function() onRemovePlan,
+  const PlanView({
+    required this.plan,
+    required this.onItemStatusChanged,
+    this.onRemovePlan,
     super.key,
-  })  : _onRemovePlan = onRemovePlan,
-        _planIndex = planIndex,
-        _plan = PlanRepository.instance.plans[planIndex];
+  });
 
-  final _repo = PlanRepository.instance;
-  final int _planIndex;
-  final Plan _plan;
-  final void Function() _onRemovePlan;
+  final Plan plan;
+
+  // ignore: avoid_positional_boolean_parameters
+  final void Function(int itemIndex, bool isDone) onItemStatusChanged;
+  final void Function()? onRemovePlan;
 
   @override
   Widget build(BuildContext context) => Card(
@@ -33,31 +33,31 @@ class PlanView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    _plan.title,
+                    plan.title,
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: Colors.red[100],
-                      shape: BoxShape.circle,
+                  if (onRemovePlan != null)
+                    DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: Colors.red[100],
+                        shape: BoxShape.circle,
+                      ),
+                      child: IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: onRemovePlan,
+                      ),
                     ),
-                    child: IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: _onRemovePlan,
-                    ),
-                  ),
                 ],
               ),
               const Divider(),
               Expanded(
                 child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: _plan.items.length,
+                  itemCount: plan.items.length,
                   itemBuilder: (context, index) {
-                    final item = _plan.items[index];
+                    final item = plan.items[index];
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 4),
                       child: Row(
@@ -66,12 +66,13 @@ class PlanView extends StatelessWidget {
                             toggleable: true,
                             value: true,
                             groupValue: item.isDone,
-                            onChanged: (done) => _doneChanged(index, done),
+                            onChanged: (done) =>
+                                onItemStatusChanged(index, done ?? false),
                           ),
                           const SizedBox(width: 12),
                           Expanded(
                             child: Text(
-                              _plan.items[index].title,
+                              plan.items[index].title,
                               style: const TextStyle(fontSize: 16),
                             ),
                           ),
@@ -84,11 +85,5 @@ class PlanView extends StatelessWidget {
             ],
           ),
         ),
-      );
-
-  void _doneChanged(int index, bool? done) => _repo.setPlanItemStatus(
-        planIndex: _planIndex,
-        itemIndex: index,
-        isDone: done ?? false,
       );
 }
