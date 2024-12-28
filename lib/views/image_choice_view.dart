@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum ImageChoice { location, room }
+import '../data/image_choice.dart';
 
 class ImageChoiceView extends StatelessWidget {
   const ImageChoiceView({
@@ -22,7 +22,7 @@ class ImageChoiceView extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(24),
               child: Image.asset(
-                _imageAssetPath(choice),
+                imageAssetPath(choice),
                 fit: BoxFit.cover,
               ),
             ),
@@ -46,9 +46,4 @@ class ImageChoiceView extends StatelessWidget {
           ),
         ],
       );
-
-  String _imageAssetPath(ImageChoice choice) => switch (choice) {
-        ImageChoice.location => 'assets/location.png',
-        ImageChoice.room => 'assets/room.png',
-      };
 }

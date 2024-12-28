@@ -4,9 +4,11 @@ import 'dart:convert';
 
 import 'package:firebase_vertexai/firebase_vertexai.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../buttons/hollow_button.dart';
 import '../buttons/solid_button.dart';
+import '../data/image_choice.dart';
 import '../data/plan_repository.dart';
 import 'image_choice_view.dart';
 import 'plan_view.dart';
@@ -218,10 +220,15 @@ The substasks should follow logical order ''',
     final text = _controller.text;
     final prompt = 'Generate a title and list of tasks for $text '
         'using the ${_selectedImageChoice.name}.png image provided.';
-    final result = await _model.generateContent([Content.text(prompt)]);
-    final json = jsonDecode(result.text!);
+
+    final image = await rootBundle.load(imageAssetPath(_selectedImageChoice));
+    final result = await _model.generateContent([
+      Content.text(prompt),
+      Content.inlineData('image/png', image.buffer.asUint8List()),
+    ]);
 
     setState(() {
+      final json = jsonDecode(result.text!);
       _plan = Plan.fromJson(json);
       _isGenerating = false;
     });
