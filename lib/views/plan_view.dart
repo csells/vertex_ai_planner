@@ -39,10 +39,15 @@ class PlanView extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.delete_outline),
-                    onPressed: _onRemovePlan,
-                    color: Colors.red[100],
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: Colors.red[100],
+                      shape: BoxShape.circle,
+                    ),
+                    child: IconButton(
+                      icon: const Icon(Icons.delete),
+                      onPressed: _onRemovePlan,
+                    ),
                   ),
                 ],
               ),
