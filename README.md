@@ -1,3 +1,6 @@
+# Deprecated
+This repo has been deprecated in favor of it's new home: https://github.com/FirebaseExtended/make-it-so-flutter
+
 # Vertex AI Planner
 
 The vertex_ai_planner repository contains a sample app showcasing the power of Firebase Vertex AI. It's written using Flutter and [the Vertex AI in Firebase Flutter package](https://pub.dev/packages/firebase_vertexai).
